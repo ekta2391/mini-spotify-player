@@ -1,31 +1,49 @@
 <template>
   <div class="player">
-      <button @click="getTracks" />
+    <div class="album-art" :style="albumArtStyle">
+
+    </div>
+    <div class="track-player">
+
+    </div>
   </div>
 </template>
 
 <script>
-import api from '../services/api'
+
+import store from '../store'
 
 export default {
   name: 'MusicPlayer',
   data () {
     return {
+      coverImage: ''
     }
   },
-  methods: {
-    getTracks () {
-      const data = api().get()
-        .then(response => {
-          console.log(response.data)
-        })
-      return data
+  mounted () {
+    console.log(this.$store.state)
+    // this.coverImage = this.$store.state.musicTracks.tracks[0].cover_image
+  },
+  computed: {
+    albumArtStyle () {
+      return { 'background-image': `url('${this.$store.state.musicTracks.tracks[0].cover_image}')`, 'background-size': 'cover' }
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .player {
+    width: 40%;
+    height: 70%;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+  }
+  .album-art {
+    flex-grow: 2;
+  }
+  .track-player {
+    flex-grow: 1;
+  }
 </style>
