@@ -4,7 +4,7 @@
 
     </div>
     <div class="track-player">
-
+      <button @click="nextTrack">Click</button>
     </div>
   </div>
 </template>
@@ -17,16 +17,16 @@ export default {
   name: 'MusicPlayer',
   data () {
     return {
-      coverImage: ''
     }
-  },
-  mounted () {
-    console.log(this.$store.state)
-    // this.coverImage = this.$store.state.musicTracks.tracks[0].cover_image
   },
   computed: {
     albumArtStyle () {
-      return { 'background-image': `url('${this.$store.state.musicTracks.tracks[0].cover_image}')`, 'background-size': 'cover' }
+      return { 'background-image': `url('${this.$store.state.currentTrack.cover_image}')`, 'background-size': 'cover' }
+    }
+  },
+  methods: {
+    nextTrack () {
+      this.$store.commit('nextTrack')
     }
   }
 }

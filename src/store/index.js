@@ -6,18 +6,24 @@ Vue.use(Vuex)
 export default new Vuex.Store(
   {
     state: {
-      musicTracks: null
+      musicTracks: null,
+      currentTrack: {}
     },
     mutations: {
       init (state, tracks) {
         state.musicTracks = tracks
+        state.currentTrack = tracks.tracks[0]
+      },
+      nextTrack (state) {
+        let currIdx = 0
+        state.musicTracks.tracks.find((track, index) => {
+          if (track.url === state.currentTrack.url) {
+            currIdx = index
+          }
+        })
+        state.currentTrack = state.musicTracks.tracks[currIdx + 1]
+        console.log(state.currentTrack)
       }
-      // addWord (state, word) {
-      //   state.words.push(word)
-      // },
-      // deleteWord (state, word) {
-      //   state.words = state.words.filter(obj => obj.headword !== word)
-      // }
     }
   }
 )

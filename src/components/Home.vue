@@ -19,7 +19,7 @@ export default {
     api().get()
       .then(response => {
         this.$store.commit('init', response.data)
-        // console.log(this.$store.state.musicTracks.tracks[0].cover_image)
+        console.log(this.$store.state)
       })
   },
   data () {
