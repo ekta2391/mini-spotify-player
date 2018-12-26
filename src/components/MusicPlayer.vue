@@ -4,7 +4,8 @@
 
     </div>
     <div class="track-player">
-      <button @click="nextTrack">Click</button>
+      <button @click="nextTrack">Next</button>
+      <button @click="prevTrack">Prev</button>
     </div>
   </div>
 </template>
@@ -27,6 +28,9 @@ export default {
   methods: {
     nextTrack () {
       this.$store.commit('nextTrack')
+    },
+    prevTrack () {
+      this.$store.commit('prevTrack')
     }
   }
 }

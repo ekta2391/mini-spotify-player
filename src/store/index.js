@@ -23,6 +23,16 @@ export default new Vuex.Store(
         })
         state.currentTrack = state.musicTracks.tracks[currIdx + 1]
         console.log(state.currentTrack)
+      },
+      prevTrack (state) {
+        let currIdx = 0
+        state.musicTracks.tracks.find((track, index) => {
+          if (track.url === state.currentTrack.url) {
+            currIdx = index
+          }
+        })
+        state.currentTrack = state.musicTracks.tracks[currIdx - 1]
+        console.log(state.currentTrack)
       }
     }
   }
