@@ -14,6 +14,9 @@ export default new Vuex.Store(
         state.musicTracks = tracks
         state.currentTrack = tracks.tracks[0]
       },
+      getStore (state) {
+        return state
+      },
       nextTrack (state) {
         let currIdx = 0
         state.musicTracks.tracks.find((track, index) => {

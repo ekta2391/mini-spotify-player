@@ -4,15 +4,20 @@
 
     </div>
     <div class="track-player">
-      <!-- <audio controls :src="currentTrack.url" type="audio/mpeg"/>
-      <button @click="prevTrack">Prev</button>
-      <button @click="nextTrack">Next</button> -->
+      <audio ref="audioPlayer" controls :src="currentTrack.url" type="audio/mpeg"/>
       <div class="play-buttons">
-        <img :src="backImg"/>
-        <img :src="playImg"/>
-        <img :src="forwardImg"/>
+        <img role="button" @click="prevTrack" :src="backImg"/>
+        <img v-if="!playing" role="button" @click="playTrack" :src="playImg"/>
+        <img v-else role="button" @click="playTrack" :src="pauseImg"/>
+        <img role="button" @click="nextTrack" :src="forwardImg"/>
       </div>
-      <div class="progress-bar"></div>
+      <div class="track-info">
+        <p>{{ store ? store.state.musicTracks.artist : '' }}</p>
+        <div class="player-progress">
+          <div :style="progressStyle" class="progress-bar"></div>
+        </div>
+        <p>{{ currentTrack.name || '' }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -33,6 +38,8 @@ export default {
   name: 'MusicPlayer',
   data () {
     return {
+      store,
+      audioRef: {},
       backImg,
       backImgHover,
       playImg,
@@ -40,18 +47,42 @@ export default {
       forwardImg,
       forwardImgHover,
       pauseImg,
-      pauseImgHover
+      pauseImgHover,
+      playing: false
     }
+  },
+  created () {
+    this.audioRef = this.$refs
+  },
+  mounted () {
+    console.log(this.store)
+    this.store = this.$store.commit('getStore')
+    this.audioPlay = this.$refs
+    console.log(this.audioRef.audioPlayer.played)
   },
   computed: {
     albumArtStyle () {
       return { 'background-image': `url('${this.$store.state.currentTrack.cover_image}')`, 'background-size': 'cover' }
+    },
+    progressStyle () {
+      return {
+        width: '50%',
+        height: '100%',
+        'background-color': '#6ED7C5',
+        top: '0',
+        left: '0',
+        right: '0'
+      }
     },
     currentTrack () {
       return this.$store.state.currentTrack
     }
   },
   methods: {
+    playTrack () {
+      this.playing === false ? this.audioRef.audioPlayer.play() : this.audioRef.audioPlayer.pause()
+      this.playing = !this.playing
+    },
     nextTrack () {
       this.$store.commit('nextTrack')
     },
@@ -62,8 +93,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
   .player {
+    max-width: 480px;
+    max-height: 645px;
     width: 40%;
     height: 70%;
     background-color: white;;
@@ -71,17 +104,34 @@ export default {
     flex-direction: column;
   }
   .album-art {
-    flex-grow: 6;
+    flex-grow: 10;
   }
   .track-player {
-    flex-grow: 1;
     display: flex;
     flex-direction: row;
+    audio {
+      display: none;
+    }
   }
   .play-buttons {
-    margin-top: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+     margin: 5px 12px;
+     &:hover {
+      cursor: pointer;
+      }
+    }
   }
-  .play-buttons img{
-    margin: 5px 12px;
+  .track-info {
+    flex-grow: 1;
+    text-align: left;
+    margin-left: 20px;
+  }
+  .player-progress {
+    width: 90%;
+    height: 2px;
+    background-color: #C9D0CE;
   }
 </style>
