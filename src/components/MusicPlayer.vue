@@ -4,15 +4,37 @@
 
     </div>
     <div class="track-player">
-      <audio ref="audioPlayer" controls :src="currentTrack.url" type="audio/mpeg"/>
+      <audio id="audioTag" ref="audioPlayer" controls :src="currentTrack.url" type="audio/mpeg"/>
       <div class="play-buttons">
-        <img role="button" @click="prevTrack" :src="backImg"/>
-        <img v-if="!playing" role="button" @click="playTrack" :src="playImg"/>
-        <img v-else role="button" @click="playTrack" :src="pauseImg"/>
-        <img role="button" @click="nextTrack" :src="forwardImg"/>
+        <span
+        role="button"
+        class="back-img-btn"
+        @click.prevent="prevTrack"
+        >
+        </span>
+        <span
+        role="button"
+        v-if="!playing"
+        class="play-img-btn"
+        @click.prevent="playTrack"
+        >
+        </span>
+        <span
+        role="button"
+        v-else
+        class="pause-img-btn"
+        @click.prevent="playTrack"
+        >
+        </span>
+        <span
+        role="button"
+        class="next-img-btn"
+        @click.prevent="nextTrack"
+        >
+        </span>
       </div>
       <div class="track-info">
-        <p>{{ store ? store.state.musicTracks.artist : '' }}</p>
+        <p>{{ storeState.musicTracks.artist || '' }}</p>
         <div class="player-progress">
           <div :style="progressStyle" class="progress-bar"></div>
         </div>
@@ -39,7 +61,9 @@ export default {
   data () {
     return {
       store,
-      audioRef: {},
+      audioRef: undefined,
+      currentSeconds: 0,
+      durationSeconds: 0,
       backImg,
       backImgHover,
       playImg,
@@ -51,22 +75,13 @@ export default {
       playing: false
     }
   },
-  created () {
-    this.audioRef = this.$refs
-  },
-  mounted () {
-    console.log(this.store)
-    this.store = this.$store.commit('getStore')
-    this.audioPlay = this.$refs
-    console.log(this.audioRef.audioPlayer.played)
-  },
   computed: {
     albumArtStyle () {
       return { 'background-image': `url('${this.$store.state.currentTrack.cover_image}')`, 'background-size': 'cover' }
     },
     progressStyle () {
       return {
-        width: '50%',
+        width: this.durationSeconds ? (this.currentTime / this.durationSeconds) * 100 + '%' : '0%',
         height: '100%',
         'background-color': '#6ED7C5',
         top: '0',
@@ -76,18 +91,34 @@ export default {
     },
     currentTrack () {
       return this.$store.state.currentTrack
+    },
+    currentTime () {
+      return this.currentSeconds
+    },
+    storeState () {
+      return this.$store.state
     }
   },
   methods: {
     playTrack () {
-      this.playing === false ? this.audioRef.audioPlayer.play() : this.audioRef.audioPlayer.pause()
+      this.audioRef = this.$refs.audioPlayer
+      this.audioRef.addEventListener('timeupdate', this.update)
+      this.playing === false ? this.audioRef.play() : this.audioRef.pause()
       this.playing = !this.playing
     },
     nextTrack () {
       this.$store.commit('nextTrack')
+      this.currentSeconds = 0
+      this.playing = false
     },
     prevTrack () {
       this.$store.commit('prevTrack')
+      this.currentSeconds = 0
+      this.playing = false
+    },
+    update (e) {
+      this.currentSeconds = parseInt(this.audioRef.currentTime)
+      this.durationSeconds = parseInt(this.audioRef.duration)
     }
   }
 }
@@ -114,18 +145,56 @@ export default {
     }
   }
   .play-buttons {
+    margin-left: 15px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    flex-grow: 1;
     img {
      margin: 5px 12px;
      &:hover {
       cursor: pointer;
       }
     }
+
+    span {
+      width: 25px;
+      height: 20px;
+      background-repeat: no-repeat;
+    }
+  }
+  .back-img-btn {
+    background-image: url('../assets/back_idle.png');
+    &:hover {
+      background-image: url('../assets/back_hover.png');
+      cursor: pointer;
+    }
+  }
+  .next-img-btn {
+    background-image: url('../assets/forward_idle.png');
+    &:hover {
+      background-image: url('../assets/forward_hover.png');
+      cursor: pointer;
+    }
+  }
+  .play-img-btn {
+    background-image: url('../assets/play_idle.png');
+    margin-left: 10px;
+    &:hover {
+      background-image: url('../assets/play_hover.png');
+      cursor: pointer;
+    }
+  }
+  .pause-img-btn {
+    background-image: url('../assets/pause_idle.png');
+    margin-left: 10px;
+    &:hover {
+      background-image: url('../assets/pause_hover.png');
+      cursor: pointer;
+    }
   }
   .track-info {
-    flex-grow: 1;
+    flex-grow: 10;
     text-align: left;
     margin-left: 20px;
   }
