@@ -2,6 +2,15 @@
 
 > A Vue.js project
 
+This project is a mini spotify player that is built in Vue.js and uses npm as its package manager.
+Functionalities included:
+> 1. Play/Pause
+> 2. Next/Prev Song
+> 3. Track Art
+> 4. Artist Name
+> 5. Song Name  
+> 6. Current track progress bar
+
 ## Build Setup
 
 ``` bash
@@ -11,20 +20,4 @@ npm install
 # serve with hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
