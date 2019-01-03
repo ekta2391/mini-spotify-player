@@ -1,7 +1,6 @@
 <template>
   <div class="player">
     <div class="album-art" :style="albumArtStyle">
-
     </div>
     <div class="track-player">
       <audio id="audioTag" ref="audioPlayer" controls :src="currentTrack.url" type="audio/mpeg"/>
@@ -47,14 +46,6 @@
 <script>
 
 import store from '../store'
-import backImg from '../assets/back_idle.png'
-import backImgHover from '../assets/back_hover.png'
-import playImg from '../assets/play_idle.png'
-import playImgHover from '../assets/play_hover.png'
-import forwardImg from '../assets/forward_idle.png'
-import forwardImgHover from '../assets/forward_hover.png'
-import pauseImg from '../assets/pause_idle.png'
-import pauseImgHover from '../assets/pause_hover.png'
 
 export default {
   name: 'MusicPlayer',
@@ -64,14 +55,6 @@ export default {
       audioRef: undefined,
       currentSeconds: 0,
       durationSeconds: 0,
-      backImg,
-      backImgHover,
-      playImg,
-      playImgHover,
-      forwardImg,
-      forwardImgHover,
-      pauseImg,
-      pauseImgHover,
       playing: false
     }
   },
